@@ -7,7 +7,7 @@ export default function Page() {// Home page, presentation + quick search bar + 
     return (
         <Layout
             title="Product"
-            description="Home"
+            description="One singular product"
         >
             <div className="flex-1 flex flex-col items-center justify-between p-24">
                 <h1 className={`mb-3 text-5xl font-semibold text-center`} >Product</h1>
