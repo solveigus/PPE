@@ -1,40 +1,37 @@
-import Link from 'next/link'
-import Layout from '../components/Layout.js'
-import { useSupabaseClient } from '@supabase/auth-helpers-react'
-import { useState, useEffect } from 'react'
-import Pagination from '@/components/Pagination.js'
+import Link from 'next/link';
+import Layout from '../components/Layout.js';
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
+import { useState, useEffect } from 'react';
+import Pagination from '@/components/Pagination.js';
 
-//This page displays all of the products, 
-//  it has pages to show the various products
-//  and a search bar to find an products by keyword
 export default function Products() {
-    const [products, setProducts] = useState([]) //use state to get all the products
-    const supabase = useSupabaseClient() //connection to the database
-    const [session, setSession] = useState(null) //authentificated user will have acces to other features
-    const [query, setQuery] = useState('')
+    const [products, setProducts] = useState([]);
+    const supabase = useSupabaseClient();
+    const [session, setSession] = useState(null);
+    const [query, setQuery] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [productsPerPage] = useState(10);
 
-    //getting the authentification
     useEffect(() => {
         (async () => {
             supabase.auth.getSession().then(({ data: { session } }) => {
-                setSession(session)
-            })
-        })()
-    }, [supabase.auth])
+                setSession(session);
+            });
+        })();
+    }, [supabase.auth]);
 
-    //getting all the products and ordering them by time of creation
     useEffect(() => {
         (async () => {
             let { data, error, status } = await supabase
-                .from('products').select(`id, name, type`);
+                .from('products')
+                .select(`id, name, type`);
             if (error) {
                 throw error;
             }
-            setProducts(data)
-        })()
-    }, [supabase])
+            setProducts(data);
+        })();
+    }, [supabase]);
+
 
     //This function handles the search of products
     //  you can combine words and the searh is in the titles and the content
@@ -76,7 +73,6 @@ export default function Products() {
     
     
 
-    //to handle the pages
     const paginate = (pageNumber) => {
         setCurrentPage(pageNumber);
     };
@@ -85,7 +81,6 @@ export default function Products() {
     const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
     const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);
 
-    //The button create an Product appears only if a user is signed in
     return (
         <Layout
             title="Products"
@@ -116,30 +111,30 @@ export default function Products() {
                 />
             </div>
         </Layout>
-    )
+    );
 }
 
-//This component is used to display all of the elements in an product
 function ProductsPage({ products }) {
     return (
         <div>
             <ul>
                 {products.map((product) => (
                     <li key={product.id}>
-                        <Link className='block p-2 rounded-lg border border-transparent transition-colors hover:border-blue-700 hover:bg-blue-600' href={`/product`}>
-
-                            <div className="flex">
-                                <p className="text-2xl font-semibold mr-2">Name:</p>
-                                <p className="text-2xl">{product.name}</p>
-                            </div>
-                            <div className="flex">
-                                <p className={`mb-3 text-2xl font-semibold mr-2`}> Type:</p>
-                                <p className="text-2xl">{product.type}</p>
-                            </div>
+                        <Link href={`/products/${product.id}`}> {/* Link to individual product page */}
+                            <a className='block p-2 rounded-lg border border-transparent transition-colors hover:border-blue-700 hover:bg-blue-600'>
+                                <div className="flex">
+                                    <p className="text-2xl font-semibold mr-2">Name:</p>
+                                    <p className="text-2xl">{product.name}</p>
+                                </div>
+                                <div className="flex">
+                                    <p className={`mb-3 text-2xl font-semibold mr-2`}>Type:</p>
+                                    <p className="text-2xl">{product.type}</p>
+                                </div>
+                            </a>
                         </Link>
                     </li>
                 ))}
             </ul>
         </div>
-    )
+    );
 }

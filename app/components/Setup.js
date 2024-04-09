@@ -8,7 +8,7 @@ export default function Setup({ pictures, list1, list2 }) {
         <h2 className="text-xl">Pictures:</h2>
         <div className="picture-list grid grid-cols-2 gap-2">
           {pictures.map((picture, index) => (
-            <Link key={index} href={`/product/${index + 1}`} passHref>
+            <Link key={index} href={`/products/${index + 1}`} passHref>
               <img src={picture} alt={`Picture ${index + 1}`} className="w-full" />
             </Link>
           ))}
