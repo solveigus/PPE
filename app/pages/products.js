@@ -39,25 +39,42 @@ export default function Products() {
     //This function handles the search of products
     //  you can combine words and the searh is in the titles and the content
     const handleSearch = async () => {
-        const searchTerms = query.trim().split(' ').filter(Boolean);
-        const textSearchQuery = searchTerms.map(term => `'${term}'`).join(' | ');
-        const { data, error } = await supabase
-            .from('products')
-            .select()
-            .textSearch('name_type', textSearchQuery);
-        if (error) {
-            throw error;
-        }
-        setProducts(data)
-        if (!query) {
-            let { data, error, status } = await supabase
-                .from('products').select(`id, name, type`);;
+        if (!query.trim()) {
+            // If the query is empty, fetch all products
+            const { data, error } = await supabase
+                .from('products')
+                .select(`id, name, type`);
             if (error) {
                 throw error;
             }
-            setProducts(data)
+            setProducts(data);
+        } else {
+            // If there's a query, search by name and type separately
+            const searchTerms = query.trim().split(' ').filter(Boolean);
+            const nameSearchQuery = searchTerms.map(term => `'${term}'`).join(' | ');
+            const typeSearchQuery = searchTerms.map(term => `'${term}'`).join(' | ');
+            const { data: nameResults, error: nameError } = await supabase
+                .from('products')
+                .select()
+                .textSearch('name', nameSearchQuery);
+            const { data: typeResults, error: typeError } = await supabase
+                .from('products')
+                .select()
+                .textSearch('type', typeSearchQuery);
+            
+            if (nameError || typeError) {
+                throw nameError || typeError;
+            }
+    
+            // Merge the results from both searches
+            const mergedResults = [...nameResults, ...typeResults];
+    
+            setProducts(mergedResults);
         }
     };
+    
+    
+    
 
     //to handle the pages
     const paginate = (pageNumber) => {
@@ -126,12 +143,3 @@ function ProductsPage({ products }) {
         </div>
     )
 }
-
-//<Link className='block p-2 rounded-lg border border-transparent transition-colors hover:border-blue-700 hover:bg-blue-600' href={`/product/${product.id}`}>
-/*{session ? (
-                    <Link
-                        className='block p-2 rounded-lg border border-transparent transition-colors hover:border-blue-700 hover:bg-blue-600'
-                        href="/create-article">
-                        Create a new article
-                    </Link>
-                ) : null}*/

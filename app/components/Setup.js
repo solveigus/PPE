@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 
 export default function Setup({ pictures, list1, list2 }) {
   return (
@@ -7,7 +8,9 @@ export default function Setup({ pictures, list1, list2 }) {
         <h2 className="text-xl">Pictures:</h2>
         <div className="picture-list grid grid-cols-2 gap-2">
           {pictures.map((picture, index) => (
-            <img key={index} src={picture} alt={`Picture ${index + 1}`} className="w-full" />
+            <Link key={index} href={`/product/${index + 1}`} passHref>
+              <img src={picture} alt={`Picture ${index + 1}`} className="w-full" />
+            </Link>
           ))}
         </div>
       </div>

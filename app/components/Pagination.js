@@ -1,19 +1,16 @@
 import { useRouter } from 'next/router';
 
-
-const Pagination = ({ unitPerPage, totalUnits, paginate }) => {
+const Pagination = ({ productsPerPage, totalProducts, paginate }) => {
   const router = useRouter();
   const pageNumbers = [];
 
-  //The array pageNumbers is a list of the numbers of the pages
-  for (let i = 1; i <= Math.ceil(totalUnits / unitPerPage); i++) {
+  for (let i = 1; i <= Math.ceil(totalProducts / productsPerPage); i++) {
     pageNumbers.push(i);
   }
 
-  //This function allows us to change to the following page of units
   const handlePagination = (number) => {
     paginate(number);
-    router.push(`products/?page=${number}`); // Replaces with your query parameters
+    router.push(`/products?page=${number}`);
   };
 
   return (
@@ -30,5 +27,6 @@ const Pagination = ({ unitPerPage, totalUnits, paginate }) => {
     </nav>
   );
 };
+
 
 export default Pagination;
