@@ -1,10 +1,11 @@
 import Layout from '../components/Layout.js';
 import { useState } from 'react';
+import { useSupabaseClient } from '@supabase/auth-helpers-react'
 
 export default function Page() {
   const [selectedOption, setSelectedOption] = useState(null);
   const [currentQuestion, setCurrentQuestion] = useState(1);
-
+  const supabase = useSupabaseClient();
   const questions = [
     {
       id: 1,
@@ -217,9 +218,19 @@ export default function Page() {
     setSelectedOption(option);
   };
 
-  const handleNextClick = () => {
+  const handleNextClick = async () => {
     if (selectedOption) {
       const nextQuestion = currentQuestionObj.options.find(opt => opt.id === selectedOption).nextQuestion;
+      
+      // Mettre à jour la base de données en fonction de la réponse de l'utilisateur
+      if (currentQuestionObj.id === 4 && selectedOption === "MainFermee") {
+        // Mettre à jour la valeur dans la table "hand" où id = 1 (par exemple)
+        const { data, error } = await supabase.from('hand').update({ hand_closed: true }).eq('id', 1);
+        if (error) {
+          console.error('Erreur lors de la mise à jour de la base de données:', error.message);
+        }
+      }
+
       setCurrentQuestion(nextQuestion);
       setSelectedOption(null);
     } else {

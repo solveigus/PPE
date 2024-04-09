@@ -28,7 +28,7 @@ export default function Page() {
           <div className='flex items-center justify-center'>
             <nav>
               
-              <button className='bg-blue-500 rounded'>
+              <button className='bg-blue-500 rounded text'>
               <Link href="/quizz" className={`block p-2 rounded-lg border border-transparent transition-colors hover:border-blue-700 hover:bg-blue-600 rounded `}>Start quiz</Link>
                 
               </button>
