@@ -15,22 +15,22 @@ export default function Page() {
       ]
     },
     {
-      id: 2, //Main valide
+      id: 2, //MAIN VALIDE
       question: "Avez vous une console ?",
-      options: [///////////////TODO: CHANGER NEXTQUESTION
-        { id: "ConsolePC", label: "PC", nextQuestion: 3 },
-        { id: "ConsolePS5", label: "PS5", nextQuestion: 3 },
-        { id: "ConsolePS4", label: "PS4", nextQuestion: 3 },
-        { id: "ConsolePS3", label: "PS3", nextQuestion: 3 },
-        { id: "ConsoleXbox", label: "Xbox", nextQuestion: 3 },
-        { id: "ConsoleSwitch", label: "Switch", nextQuestion: 3 }
+      options: [
+        { id: "ConsolePC", label: "PC", nextQuestion: 4 },
+        { id: "ConsolePS5", label: "PS5", nextQuestion: 555 },
+        { id: "ConsolePS4", label: "PS4", nextQuestion: 555 },
+        { id: "ConsolePS3", label: "PS3", nextQuestion: 555 },
+        { id: "ConsoleXbox", label: "Xbox", nextQuestion: 555 },
+        { id: "ConsoleSwitch", label: "Switch", nextQuestion: 555 }
       ]
     },
     {
-        id: 3, //Main pas valide
+        id: 3, //MAIN PAS VALIDE
         question: "Avez vous une console ?",
         options: [
-          { id: "ConsolePC", label: "PC", nextQuestion: 3 },//TODO: quizz contacteur
+          { id: "ConsolePC", label: "PC", nextQuestion: 4 },
           { id: "ConsolePS5", label: "PS5", nextQuestion: 4 },
           { id: "ConsolePS4", label: "PS4", nextQuestion: 4 },
           { id: "ConsolePS3", label: "PS3", nextQuestion: 4 },
@@ -63,12 +63,30 @@ export default function Page() {
       ]
     },
     {
+      id: 499, //Sensibilité doigts
+        question: "Avec quelle sensibilité êtes vous à l'aise ?",
+        options: [
+          { id: "1", label: "Sensibilité normale", nextQuestion: 6 },
+          { id: "2", label: "Sensibilité haute", nextQuestion: 6 },
+          { id: "3", label: "Sensibilité très haute", nextQuestion: 6 }
+        ]
+    },
+    {
+      id: 498, //Quel type de jeux
+        question: "A quel type de jeu voulez vous jouer ?",
+        options: [
+          { id: "1", label: "Jeu de tir", nextQuestion: 555 }, //1J 8C
+          { id: "2", label: "Jeu de combat ou de rôle", nextQuestion: 555 }, //1J 4C
+          { id: "3", label: "Jeu de sport/course", nextQuestion: 555 } //6C
+        ]
+    },
+    {
         id: 500, //Doigts
         question: "Dans quelle(s) direction(s) va ton premier doigt ?",
         options: [
-          { id: "1", label: "Une", nextQuestion: 3 },
-          { id: "2", label: "Deux", nextQuestion: 6 },
-          { id: "3", label: "Trois", nextQuestion: 6 }
+          { id: "1", label: "Une", nextQuestion: 499 },
+          { id: "2", label: "Deux", nextQuestion: 499 },
+          { id: "3", label: "Trois", nextQuestion: 499 }
         ]
     },
     {
@@ -147,9 +165,8 @@ export default function Page() {
         id: 7, //C ou J pieds
         question: "Préfereriez vous un joystick ou un contacteur ?",
         options: [
-          { id: "1", label: "Joystick", nextQuestion: 3 }, //TODO: suite???
-          { id: "2", label: "Contacteur", nextQuestion: 3 },
-          { id: "0", label: "Préfère un autre membre", nextQuestion: 8 }
+          { id: "1", label: "Joystick", nextQuestion: 8 },
+          { id: "2", label: "Contacteur", nextQuestion: 8 },
         ]
       },
       {
@@ -164,18 +181,34 @@ export default function Page() {
         id: 9, //C ou J cou
         question: "Préfereriez vous un joystick ou un contacteur ?",
         options: [
-          { id: "1", label: "Joystick", nextQuestion: 3 }, //TODO: suite???
+          { id: "1", label: "Joystick", nextQuestion: 10 }, 
           { id: "2", label: "Contacteur", nextQuestion: 10 },
         ]
       },
       {
-        id: 10, //Souffle
+        id: 10, //Autre partie du corps contacteur
+        question: "Pouvez vous appuyer avec d'autre partie du corps ?",
+        options: [
+          { id: "1", label: "Une", nextQuestion: 11 }, //contacteur standard robuste
+          { id: "2", label: "Deux", nextQuestion: 11 }, //contacteur standard robuste double
+          { id: "3", label: "Aucune", nextQuestion: 11  }
+        ]
+      },
+      {
+        id: 11, //Souffle
         question: "Pouvez vous souffler ?",
         options: [
-          { id: "1", label: "Oui" }, //TODO: suite???
-          { id: "2", label: "Non" }
+          { id: "1", label: "Oui", nextQuestion: 498 }, //TODO: suite???
+          { id: "2", label: "Non", nextQuestion: 498 }
         ]
-      }
+      },
+      {
+        id: 555, //FIN
+          question: "Fin",
+          options: [
+            { id: "1", label: "fin possible"}
+          ]
+      },
   ];
 
   const currentQuestionObj = questions.find(question => question.id === currentQuestion);
