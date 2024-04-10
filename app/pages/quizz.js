@@ -7,7 +7,7 @@ export default function Page() {
   const [currentQuestion, setCurrentQuestion] = useState(1);
   const supabase = useSupabaseClient();
   const questions = [
-    {
+    { 
       id: 1,
       question: "Avez vous une main valide ?",
       options: [
@@ -43,9 +43,10 @@ export default function Page() {
         id: 4, //Quel Joystick
         question: "Quel type de joystick pouvez-vous prendre en main ?",
         options: [
+          { id: "Aucun", label: "Aucun", nextQuestion: 5 },
           { id: "MainOuverte", label: "Main ouverte", nextQuestion: 5 },
           { id: "MainMiouverte", label: "Main mi-ouverte", nextQuestion: 5 },
-          { id: "MainFermee", label: "Main fermée", nextQuestion: 5 },
+          { id: "MainFermee", label: "Main fermée", nextQuestion: 5 }
         ]
     },
     {
@@ -157,9 +158,9 @@ export default function Page() {
         id: 6, //Pieds
         question: "Avez vous des pieds mobiles ?",
         options: [
+          { id: "0", label: "Aucun", nextQuestion: 8 },
           { id: "1", label: "Un", nextQuestion: 7 },
-          { id: "2", label: "Deux", nextQuestion: 7 },
-          { id: "0", label: "Aucun", nextQuestion: 8 }
+          { id: "2", label: "Deux", nextQuestion: 7 }
         ]
       },
       {
@@ -199,7 +200,7 @@ export default function Page() {
         id: 11, //Souffle
         question: "Pouvez vous souffler ?",
         options: [
-          { id: "1", label: "Oui", nextQuestion: 498 }, //TODO: suite???
+          { id: "1", label: "Oui", nextQuestion: 498 }, 
           { id: "2", label: "Non", nextQuestion: 498 }
         ]
       },
@@ -207,7 +208,7 @@ export default function Page() {
         id: 555, //FIN
           question: "Fin",
           options: [
-            { id: "1", label: "fin possible"}
+            //{ id: "1", label: "fin possible"}
           ]
       },
   ];
@@ -223,6 +224,11 @@ export default function Page() {
       const nextQuestion = currentQuestionObj.options.find(opt => opt.id === selectedOption).nextQuestion;
 
       const mobilityId = 2;//TODO: identification
+      let sensi = "normal";
+      let foot = 0;
+
+      let J = 0;
+      let C = 0;
       
 
       if (currentQuestionObj.id === 3) { // MAIN PAS VALIDE
@@ -263,8 +269,7 @@ export default function Page() {
         }
       }
 
-
-      if (currentQuestionObj.id === 4) { // MAIN PAS VALIDE
+      if (currentQuestionObj.id === 4) { //JOYSTICK
         try {
           let consoleType = "";
           switch(selectedOption) {
@@ -289,6 +294,8 @@ export default function Page() {
               .eq('id', mobilityId )
               .select()
               break;
+            case "Aucun":
+              break;
             default:
               console.error("Option invalide sélectionnée.");
           }
@@ -297,41 +304,217 @@ export default function Page() {
           }
         }
 
-        if (currentQuestionObj.id === 5) { // MAIN PAS VALIDE
-          try {
-            let consoleType = "";
-            switch(selectedOption) {
-              case "MainOuverte":
-                const { data, error } = await supabase
-                .from('hand')
-                .update({ hand_open: true })
-                .eq('id', mobilityId )
-                .select()
-                break;
-              case "MainMiouverte":
-                const { data1, error1 } = await supabase
-                .from('hand')
-                .update({ hand_half_open: true })
-                .eq('id', mobilityId )
-                .select()
-                break;
-              case "MainFermee":
-                const { data2, error2 } = await supabase
-                .from('hand')
-                .update({ hand_closed: true })
-                .eq('id', mobilityId )
-                .select()
-                break;
-              default:
-                console.error("Option invalide sélectionnée.");
-            }
-            } catch (error) {
-              console.error('Erreur lors de la mise à jour de la base de données:', error.message);
-            }
+
+      if (currentQuestionObj.id === 499) { //sensibilité
+        try {
+          let consoleType = "";
+          switch(selectedOption) {
+            case "1":
+                sensi = "normal";
+              break;
+            case "2":
+                sensi = "medium";
+              break;
+            case "3":
+                sensi = "low";
+              break;
+            default:
+              console.error("Option invalide sélectionnée.");
           }
+          } catch (error) {
+            console.error('Erreur lors de la mise à jour de la base de données:', error.message);
+          }
+        }
 
+      if (currentQuestionObj.id === 500 || currentQuestionObj.id === 501 || currentQuestionObj.id === 502 || currentQuestionObj.id === 503 || currentQuestionObj.id === 504 || currentQuestionObj.id === 505 || currentQuestionObj.id === 506 || currentQuestionObj.id === 507) { //doigts
+        try {
+          switch(selectedOption) {
+            case "1":
+                const { data, error } = await supabase
+                .from('finger')
+                .insert
+                ({ finger_sensibility: sensi, id_mobility: mobilityId, finger_direction: 1})
+                .select()
+              break;
+            case "2":
+              const { data1, error1 } = await supabase
+              .from('finger')
+              .insert
+              ({ finger_sensibility: sensi, id_mobility: mobilityId, finger_direction: 2})
+              .select()
+              break;
+            case "3":
+              const { data2, error2 } = await supabase
+              .from('finger')
+              .insert
+              ({ finger_sensibility: sensi, id_mobility: mobilityId, finger_direction: 3})
+              .select()
+              break;
+            default:
+              console.error("Option invalide sélectionnée.");
+          }
+          } catch (error) {
+            console.error('Erreur lors de la mise à jour de la base de données:', error.message);
+          }
+        }
 
+      if (currentQuestionObj.id === 6) { //pieds
+        try {
+          let consoleType = "";
+          switch(selectedOption) {
+            case "1":
+                foot = 1;
+              break;
+            case "2":
+                foot = 2;
+              break;
+            case "0":
+              break;
+            default:
+              console.error("Option invalide sélectionnée.");
+          }
+          } catch (error) {
+            console.error('Erreur lors de la mise à jour de la base de données:', error.message);
+          }
+        }
 
+      if (currentQuestionObj.id === 7) { //pieds J ou C
+        try {
+          let consoleType = "";
+          switch(selectedOption) {
+            case "1": // J
+                if(foot == 2)
+                {
+                    const { data2, error2 } = await supabase
+                    .from('foot')
+                    .insert
+                    ({ foot_joystick: true, id_mobility: mobilityId})
+                    .select()
+
+                    const { data1, error1 } = await supabase
+                    .from('foot')
+                    .insert
+                    ({ foot_joystick: true, id_mobility: mobilityId})
+                    .select()
+                }else{
+                      const { data2, error2 } = await supabase
+                    .from('foot')
+                    .insert
+                    ({ foot_joystick: true, id_mobility: mobilityId})
+                    .select()
+                }
+              break;
+            case "2":// C
+            if(foot == 2)
+            {
+                const { data2, error2 } = await supabase
+                .from('foot')
+                .insert
+                ({ foot_contactor: true, id_mobility: mobilityId})
+                .select()
+
+                const { data1, error1 } = await supabase
+                .from('foot')
+                .insert
+                ({ foot_contactor: true, id_mobility: mobilityId})
+                .select()
+            }else{
+                  const { data2, error2 } = await supabase
+                .from('foot')
+                .insert
+                ({ foot_contactor: true, id_mobility: mobilityId})
+                .select()
+            }
+              break;
+
+            default:
+              console.error("Option invalide sélectionnée.");
+          }
+          } catch (error) {
+            console.error('Erreur lors de la mise à jour de la base de données:', error.message);
+          }
+        }
+
+      if (currentQuestionObj.id === 9) { //cou J ou C
+        try {
+          let consoleType = "";
+          switch(selectedOption) {
+            case "1"://J
+                const { data, error } = await supabase
+                .from('mobility')
+                .update
+                ({ chin: true})
+                .eq('id', mobilityId )
+                .select()
+              break;
+            case "2"://C
+                const { data2, error2 } = await supabase
+                .from('mobility')
+                .update
+                ({ chin: true})
+                .eq('id', mobilityId )
+              break;
+            default:
+              console.error("Option invalide sélectionnée.");
+          }
+          } catch (error) {
+            console.error('Erreur lors de la mise à jour de la base de données:', error.message);
+          }
+        }
+
+        //BDD ID 10!!!!!!!!!!!!!!!!!!!!!!!!
+
+      if (currentQuestionObj.id === 11) { //souffle
+        try {
+          let consoleType = "";
+          switch(selectedOption) {
+            case "1"://Oui
+                const { data, error } = await supabase
+                .from('mobility')
+                .update
+                ({ breath: true})
+                .eq('id', mobilityId )
+                .select()
+              break;
+            case "2"://Non
+                const { data2, error2 } = await supabase
+                .from('mobility')
+                .update
+                ({ breath: true})
+                .eq('id', mobilityId )
+              break;
+            default:
+              console.error("Option invalide sélectionnée.");
+          }
+          } catch (error) {
+            console.error('Erreur lors de la mise à jour de la base de données:', error.message);
+          }
+        }
+
+       //BDD 498!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+       if (currentQuestionObj.id === 498) { //sensibilité
+        try {
+          let consoleType = "";
+          switch(selectedOption) {
+            case "1"://tir
+                C = 8;
+                J = 1;
+              break;
+            case "2"://combat
+                C = 4;
+                J = 1;
+              break;
+            case "3"://sport
+                C = 6;
+                J = 0;
+              break;
+            default:
+              console.error("Option invalide sélectionnée.");
+          }
+          } catch (error) {
+            console.error('Erreur lors de la mise à jour de la base de données:', error.message);
+          }
+        }
 
       setCurrentQuestion(nextQuestion);
       setSelectedOption(null);
