@@ -1,11 +1,16 @@
 import Layout from '../components/Layout.js';
-import { useState } from 'react';
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
+import { useState, useEffect } from 'react';
+
 
 export default function Page() {
   const [selectedOption, setSelectedOption] = useState(null);
   const [currentQuestion, setCurrentQuestion] = useState(1);
   const supabase = useSupabaseClient();
+
+  
+
+
   const questions = [
     { 
       id: 1,
@@ -219,17 +224,125 @@ export default function Page() {
     setSelectedOption(option);
   };
 
+  const [session, setSession] = useState(null)
+
+  useEffect(() => {
+    (async () => {
+      supabase.auth.getSession().then(({ data: { session } }) => {
+        setSession(session)
+      })
+    })()
+  }, [supabase.auth])
+
+  var email = "loading"
+  if (session) {
+    email = session.user.email
+  }
+
+  console.log(email);
+
+  async function createAndFetchMobility() {
+    const { data: mobilityData1, error: error2 } = await supabase
+      .from('mobility')
+      .select('id')
+      .eq('user_email', email);
+  
+    if (error2) {
+      console.error('Error getting mobility:', error2);
+      return null;
+    }
+  
+    if (mobilityData1.length === 0) {
+      const { data, error } = await supabase
+        .from('mobility')
+        .insert([{ user_email: email, chin_number_buttons: 0 }]);
+  
+      if (error) {
+        console.error('Error inserting mobility ID:', error);
+        return null;
+      }
+  
+      const { data: mobilityData, error: error1 } = await supabase
+        .from('mobility')
+        .select('id')
+        .eq('user_email', email);
+  
+      if (error1) {
+        console.error('Error fetching mobility ID:', error1);
+        return null;
+      }
+  
+      return mobilityData[0].id;
+    }
+  
+    return mobilityData1[0].id;
+  }
+
   const handleNextClick = async () => {
+
     if (selectedOption) {
       const nextQuestion = currentQuestionObj.options.find(opt => opt.id === selectedOption).nextQuestion;
+        
+      // Utilisez la fonction
+      createAndFetchMobility().then(mobilityId => {
+        
+      }).catch(err => {
+        console.error('Error:', err)
+      })
 
-      const mobilityId = 2;//TODO: identification
+      const mobilityId = await createAndFetchMobility();
+
+      console.log('Mobility ID dans handlenextclick:', mobilityId)
+
       let sensi = "normal";
       let foot = 0;
 
       let J = 0;
       let C = 0;
       
+      if (currentQuestionObj.id === 2) { // MAIN VALIDE
+        try {
+          let consoleType = "";
+          switch(selectedOption) {
+            case "ConsolePC":
+              consoleType = "PC";
+              break;
+            case "ConsolePS3":
+              consoleType = "PS3";
+              break;
+            case "ConsolePS4":
+              consoleType = "PS4";
+              break;
+            case "ConsolePS5":
+              consoleType = "PS5";
+              break;
+            case "ConsoleXbox":
+              consoleType = "Xbox";
+              break;
+            case "ConsoleSwitch":
+              consoleType = "Switch";
+              break;
+            default:
+              console.error("Option invalide sélectionnée.");
+          }
+          console.log('Mobility ID dans if:', mobilityId)
+
+          const mobilityData = await supabase
+          .from('mobility')
+          .update({ console: consoleType })
+          .eq('id', mobilityId )
+          .select()
+
+          const { data, error } = await supabase
+          .from('hand')
+          .insert([
+            { hand_valid: false, id_mobility: mobilityId },
+          ])
+          .select()
+        } catch (error) {
+          console.error('Erreur lors de la mise à jour de la base de données:', error.message);
+        }
+      }
 
       if (currentQuestionObj.id === 3) { // MAIN PAS VALIDE
         try {
@@ -256,14 +369,20 @@ export default function Page() {
             default:
               console.error("Option invalide sélectionnée.");
           }
-            
+
+          const mobilityData = await supabase
+          .from('mobility')
+          .update({ console: consoleType })
+          .eq('id', mobilityId )
+          .select()
+
+          console.log('Mobility ID dans if:', mobilityId)
           const { data, error } = await supabase
           .from('hand')
           .insert([
             { hand_valid: false, id_mobility: mobilityId },
           ])
           .select()
-
         } catch (error) {
           console.error('Erreur lors de la mise à jour de la base de données:', error.message);
         }
@@ -492,7 +611,7 @@ export default function Page() {
         }
 
        //BDD 498!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-       if (currentQuestionObj.id === 498) { //sensibilité
+       if (currentQuestionObj.id === 498) { //type de jeu
         try {
           let consoleType = "";
           switch(selectedOption) {
@@ -520,6 +639,11 @@ export default function Page() {
       setSelectedOption(null);
     } else {
       alert("Veuillez sélectionner une réponse.");
+    }
+
+    async function signOut() {
+      const { error } = await supabase.auth.signOut()
+      router.push("/")
     }
   };
 
