@@ -1,9 +1,9 @@
 // Components/Setup.js
 
-/*import React from 'react';
+import React from 'react';
 import Link from 'next/link';
 
-export default function Setup({ pictures, mobility }) {
+export default function Setup({ pictures, mobilityData }) {
   return (
     <div className="border border-black p-4 mb-4 w-full max-w-md flex items-center rounded-lg">
       <div className="pictures pr-4 border-r border-black">
@@ -19,36 +19,11 @@ export default function Setup({ pictures, mobility }) {
       <div className="text pl-2">
         <div className="text-list">
           <ul>
-            {Object.entries(mobility || {}).map(([key, value]) => (
-              key !== 'J' && key !== 'C' && ( // Skip J and C values
-                <li key={key} className="mb-2 text-2xl">
-                  {key.replace(/_/g, ' ')} : {typeof value === 'number' ? `${key.replace(/_/g, ' ')} : ${value === 1 ? '1 hand' : `${value} hands`}` : value}
-                </li>
-              )
+            {mobilityData && Object.keys(mobilityData).map((key, index) => (
+              <li key={index} className="mb-2 text-2xl">
+                <span className="text-2xl font-semibold">{key}</span> : {mobilityData[key]}
+              </li>
             ))}
-          </ul>
-        </div>
-      </div>
-      <div className="absolute h-full bg-black left-0 top-0 bottom-0 w-2 rounded-l-lg"></div>
-      <div className="absolute h-full bg-black right-0 top-0 bottom-0 w-2 rounded-r-lg"></div>
-    </div>
-  );
-}
-*/
-
-// Components/Setup.js
-
-import React from 'react';
-
-export default function Setup({ email }) {
-  return (
-    <div className="border border-black p-4 mb-4 w-full max-w-md flex items-center rounded-lg">
-      <div className="text pl-2">
-        <div className="text-list">
-          <ul>
-            <li className="mb-2 text-2xl">
-              User Email: {email}
-            </li>
           </ul>
         </div>
       </div>
