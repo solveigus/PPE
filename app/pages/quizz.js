@@ -338,12 +338,21 @@ export default function Page() {
           .eq('id', mobilityId )
           .select()
 
-          const { data, error } = await supabase
+          const { test, testerror } = await supabase
           .from('hand')
-          .insert([
-            { hand_valid: false, id_mobility: mobilityId },
-          ])
-          .select()
+          .select('id')
+          .eq('id', mobilityId );
+  
+          if (data.length > 0) {
+          
+          }else {
+            const { data, error } = await supabase //creation main
+            .from('hand')
+            .insert([
+              { hand_valid: true, id_mobility: mobilityId },
+            ])
+            .select()
+          }
         } catch (error) {
           console.error('Erreur lors de la mise à jour de la base de données:', error.message);
         }
@@ -381,13 +390,21 @@ export default function Page() {
           .eq('id', mobilityId )
           .select()
 
-          console.log('Mobility ID dans if:', mobilityId)
-          const { data, error } = await supabase
+          const { test, testerror } = await supabase
+        .from('hand')
+        .select('id')
+        .eq('id', mobilityId );
+
+        if (data.length > 0) {
+        
+        }else {
+          const { data, error } = await supabase //creation main
           .from('hand')
           .insert([
             { hand_valid: false, id_mobility: mobilityId },
           ])
           .select()
+        }
         } catch (error) {
           console.error('Erreur lors de la mise à jour de la base de données:', error.message);
         }
@@ -395,14 +412,20 @@ export default function Page() {
 
       if (currentQuestionObj.id === 4) { //JOYSTICK
         try {
-          let consoleType = "";
+          
           switch(selectedOption) {
             case "MainOuverte":
-              const { data, error } = await supabase
+            try{  
+            const { data, error } = await supabase
               .from('hand')
-              .update({ hand_open: true })
-              .eq('id', mobilityId )
+              .update({ hand_open: true, hand_half_open: false, hand_closed: false })
+              .eq('id_mobility', mobilityId )
               .select()
+            } catch (error) {
+              console.error('mainouv:', error.message);
+            }
+
+              console.log('main ouverte');
 
               const { data5, error5 } = await supabase
                 .from('mobility')
@@ -414,8 +437,8 @@ export default function Page() {
             case "MainMiouverte":
               const { data1, error1 } = await supabase
               .from('hand')
-              .update({ hand_half_open: true })
-              .eq('id', mobilityId )
+              .update({ hand_half_open: true, hand_open: false, hand_closed: false })
+              .eq('id_mobility', mobilityId )
               .select()
 
               const { data4, error4 } = await supabase
@@ -426,11 +449,12 @@ export default function Page() {
                 .select()
               break;
             case "MainFermee":
-              const { data2, error2 } = await supabase
+              const { data40, error78 } = await supabase
               .from('hand')
-              .update({ hand_closed: true })
-              .eq('id', mobilityId )
+              .update({ hand_closed: true , hand_half_open: false, hand_open: false})
+              .eq('id_mobility', mobilityId )
               .select()
+
 
               const { data3, error3 } = await supabase
               .from('mobility')
@@ -767,11 +791,6 @@ export default function Page() {
           } catch (error) {
             console.error('Erreur lors de la mise à jour de la base de données:', error.message);
           }
-        }
-
-        if (currentQuestionObj.id === 2) { 
-
-          
         }
 
       setCurrentQuestion(nextQuestion);
