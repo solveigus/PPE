@@ -19,7 +19,7 @@ export default function Header() {// component top left of the page: email accou
 
   const UserAvatar = () => {// find the gravatar image connected to the account 
     return(
-      <img src={avatar.url(session.email)} class="float-right" style={{width:'50px', borderRadius:'8px'}} alt="User Avatar" />
+      <img src={avatar.url(session.email)} className="float-right" style={{width:'50px', borderRadius:'8px'}} alt="User Avatar" />
     );
   }
 
