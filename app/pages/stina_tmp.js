@@ -20,7 +20,12 @@ export default function Products() {
         })()
     }, [supabase.auth])
 
-    const userEmail = 'stina@stina.com'; // Specify the user email here
+    var userEmail = "loading"
+  if (session) {
+    userEmail = session.user.email
+  }
+
+    //const userEmail = 'stina@stina.com'; // Specify the user email here
     //const userEmail = 'tom@tom.fr';
 
     useEffect(() => {
@@ -39,6 +44,8 @@ export default function Products() {
                 }
 
                 const { id, chin, breath, number_hands, number_feet, number_fingers } = mobilityData;
+                console.log(mobilityData[0]);
+                console.log(mobilityData)
 
                 // Initialize hand condition variables
                 let hand_valid = false;
@@ -65,6 +72,8 @@ export default function Products() {
                         if (hand.hand_open) hand_open = true;
                         if (hand.hand_closed) hand_closed = true;
                     });
+
+                    console.log(handData)
                 }
 
                 // Intialize foot condition variables
@@ -88,6 +97,7 @@ export default function Products() {
                         if (foot.foot_contactor) foot_contactor = true;
                         if (foot.foot_joystick) foot_joystick = true;
                     });
+                    console.log(footData)
                 }
 
                 // Intialize foot condition variables
@@ -164,7 +174,6 @@ export default function Products() {
                     }
 
                     fingerProductsData = [];
-                    console.log(finger_sensibility);
 
                     // If finger joystick products are found, check sensibility
                     if (fingerJoystickProducts.length > 0) {
@@ -183,6 +192,8 @@ export default function Products() {
                         });
                     }
                 }
+
+                console.log(fingerProductsData)
 
                 const allProductsData = [...productsData, ...fingerProductsData];
 

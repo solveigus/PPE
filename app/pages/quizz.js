@@ -1,13 +1,14 @@
 import Layout from '../components/Layout.js';
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 
 
 export default function Page() {
   const [selectedOption, setSelectedOption] = useState(null);
   const [currentQuestion, setCurrentQuestion] = useState(1);
   const supabase = useSupabaseClient();
-
+  const router = useRouter();
   
 
 
@@ -299,6 +300,10 @@ export default function Page() {
 
       let J = 0;
       let C = 0;
+
+      if (currentQuestionObj.id === 555) { // FIN
+        
+      }
       
       if (currentQuestionObj.id === 2) { // MAIN VALIDE
         try {
@@ -398,6 +403,13 @@ export default function Page() {
               .update({ hand_open: true })
               .eq('id', mobilityId )
               .select()
+
+              const { data5, error5 } = await supabase
+                .from('mobility')
+                .update
+                ({ number_hands: 1})
+                .eq('id', mobilityId )
+                .select()
               break;
             case "MainMiouverte":
               const { data1, error1 } = await supabase
@@ -405,11 +417,25 @@ export default function Page() {
               .update({ hand_half_open: true })
               .eq('id', mobilityId )
               .select()
+
+              const { data4, error4 } = await supabase
+                .from('mobility')
+                .update
+                ({ number_hands: 1})
+                .eq('id', mobilityId )
+                .select()
               break;
             case "MainFermee":
               const { data2, error2 } = await supabase
               .from('hand')
               .update({ hand_closed: true })
+              .eq('id', mobilityId )
+              .select()
+
+              const { data3, error3 } = await supabase
+              .from('mobility')
+              .update
+              ({ number_hands: 1})
               .eq('id', mobilityId )
               .select()
               break;
@@ -445,7 +471,84 @@ export default function Page() {
           }
         }
 
+        if (currentQuestionObj.id === 5) { //sensibilité
+          try {
+            let consoleType = "";
+            switch(selectedOption) {
+              case "UnDoigts":
+                const { data, error } = await supabase
+                .from('mobility')
+                .update
+                ({ number_fingers: 1})
+                .eq('id', mobilityId )
+                .select()
+                break;
+              case "DeuxDoigts":
+                const { data2, error2 } = await supabase
+                .from('mobility')
+                .update
+                ({ number_fingers: 2})
+                .eq('id', mobilityId )
+                .select()
+                break;
+              case "TroisDoigts":
+                const { data3, error3 } = await supabase
+                .from('mobility')
+                .update
+                ({ number_fingers: 3})
+                .eq('id', mobilityId )
+                .select()
+                break;
+                case "QuatreDoigts":
+                const { data4, error4 } = await supabase
+                .from('mobility')
+                .update
+                ({ number_fingers: 4})
+                .eq('id', mobilityId )
+                .select()
+                break;
+                case "CinqDoigts":
+                const { data5, error5 } = await supabase
+                .from('mobility')
+                .update
+                ({ number_fingers: 5})
+                .eq('id', mobilityId )
+                .select()
+                break;
+                case "SixDoigts":
+                const { data6, erro6 } = await supabase
+                .from('mobility')
+                .update
+                ({ number_fingers: 6})
+                .eq('id', mobilityId )
+                .select()
+                break;
+                case "SeptDoigts":
+                const { data7, error7 } = await supabase
+                .from('mobility')
+                .update
+                ({ number_fingers: 7})
+                .eq('id', mobilityId )
+                .select()
+                break;
+                case "huitDoigts":
+                const { data8, error8 } = await supabase
+                .from('mobility')
+                .update
+                ({ number_fingers: 8})
+                .eq('id', mobilityId )
+                .select()
+                break;
+              default:
+                console.error("Option invalide sélectionnée.");
+            }
+            } catch (error) {
+              console.error('Erreur lors de la mise à jour de la base de données:', error.message);
+            }
+          }
+
       if (currentQuestionObj.id === 500 || currentQuestionObj.id === 501 || currentQuestionObj.id === 502 || currentQuestionObj.id === 503 || currentQuestionObj.id === 504 || currentQuestionObj.id === 505 || currentQuestionObj.id === 506 || currentQuestionObj.id === 507) { //doigts
+        
         try {
           switch(selectedOption) {
             case "1":
@@ -483,9 +586,21 @@ export default function Page() {
           switch(selectedOption) {
             case "1":
                 foot = 1;
+                const { data1, error1 } = await supabase
+                .from('mobility')
+                .update
+                ({ number_feet: 1})
+                .eq('id', mobilityId )
+                .select()
               break;
             case "2":
                 foot = 2;
+                const { data, error } = await supabase
+                .from('mobility')
+                .update
+                ({ number_feet: 2})
+                .eq('id', mobilityId )
+                .select()
               break;
             case "0":
               break;
@@ -654,10 +769,21 @@ export default function Page() {
           }
         }
 
+        if (currentQuestionObj.id === 2) { 
+
+          
+        }
+
       setCurrentQuestion(nextQuestion);
       setSelectedOption(null);
     } else {
-      alert("Veuillez sélectionner une réponse.");
+      if(currentQuestionObj.id === 555)
+      {
+        router.push('/stina_tmp');
+      }else{
+        alert("Veuillez sélectionner une réponse.");
+      }
+      
     }
 
     async function signOut() {
