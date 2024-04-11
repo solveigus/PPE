@@ -27,11 +27,20 @@ export default function Page() {
           </div>
           <div className='flex items-center justify-center'>
             <nav>
+                {session ? (
+                  <button className='bg-blue-500 rounded text'>
+                    <Link href="/quizz" className={`block p-2 rounded-lg border border-transparent transition-colors hover:border-blue-700 hover:bg-blue-600 rounded `}>Start quiz</Link>
+                    </button>
+                ) : null}
+                {session ? null : (
+                  <div className="flex-1 flex flex-col items-center justify-between p-24">
+                    <h5 className={`mb-3 font-semibold text-center`}> If you want to try our quizz you must login.</h5>
+                    <button className='bg-blue-500 rounded text'>
+                  <Link href="/login" className={`block p-2 rounded-lg border border-transparent transition-colors hover:border-blue-700 hover:bg-blue-600 rounded `}>Login</Link>
+                  </button>
+                  </div>
+              )}
               
-              <button className='bg-blue-500 rounded text'>
-              <Link href="/quizz" className={`block p-2 rounded-lg border border-transparent transition-colors hover:border-blue-700 hover:bg-blue-600 rounded `}>Start quiz</Link>
-                
-              </button>
             </nav>
           </div>
         </div>

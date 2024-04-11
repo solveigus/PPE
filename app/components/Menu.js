@@ -27,6 +27,16 @@ export default function Menu() {
         <li><Link className={`block p-2 rounded-lg border border-transparent transition-colors hover:border-blue-700 hover:bg-blue-600 ${isDarkMode ? 'text-white' : 'text-black'}`} href="/contacts">Contacts</Link></li>
         <li><Link className={`block p-2 rounded-lg border border-transparent transition-colors hover:border-blue-700 hover:bg-blue-600 ${isDarkMode ? 'text-white' : 'text-black'}`} href="/login">Login</Link></li>
         <li><Link className={`block p-2 rounded-lg border border-transparent transition-colors hover:border-blue-700 hover:bg-blue-600 ${isDarkMode ? 'text-white' : 'text-black'}`} href="/products">Products</Link></li>
+        {session ? (
+          <li>
+            <Link
+              className={`block p-2 rounded-lg border border-transparent transition-colors hover:border-blue-700 hover:bg-blue-600 ${isDarkMode ? 'text-white' : 'text-black'}`}
+              href="/myproducts"
+            >
+              My products
+            </Link>
+          </li>
+        ) : null}
         </ul>
     </nav>
   )

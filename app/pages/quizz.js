@@ -791,7 +791,7 @@ export default function Page() {
     } else {
       if(currentQuestionObj.id === 555)
       {
-        router.push('/stina_tmp');
+        router.push('/myproducts');
       }else{
         alert("Veuillez sélectionner une réponse.");
       }

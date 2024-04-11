@@ -90,7 +90,7 @@ export default function Contact() {// page to contacts us
               value={formD.lastname}
               onChange={handleChange}
               className="w-full text-black py-2 px-3 border rounded shadow appearance-none"
-              placeholder="Enter your lasttname" // Placeholder
+              placeholder="Enter your lastname" // Placeholder
               required
             />
           </div>

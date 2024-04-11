@@ -24,7 +24,7 @@ export default function Products() {
     }
 
     //const userEmail = 'stina@stina.com'; // Specify the user email here
-    userEmail = 'solveig@berling.fr';
+    //userEmail = 'solveig@berling.fr';
     //userEmail = 'test@test.com';
 
     useEffect(() => {
@@ -323,7 +323,18 @@ export default function Products() {
                         Search
                     </button>
                 </div>
-                <ProductsPage products={products} />
+                {products.length === 0 &&  (
+                  <div className="flex-1 flex flex-col items-center justify-between p-24">
+                    <h5 className={`mb-3 font-semibold text-center`}> You can try our quizz to get your gamer material. </h5>
+                    <button className='bg-blue-500 rounded text'>
+                  <Link href="/quizz" className={`block p-2 rounded-lg border border-transparent transition-colors hover:border-blue-700 hover:bg-blue-600 rounded `}>Start quizz</Link>
+                  </button>
+                  </div>
+              )}
+                
+                {products.length > 0 &&(
+                  <ProductsPage products={products} />
+                )}
             </div>
         </Layout>
     );
