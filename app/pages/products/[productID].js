@@ -47,8 +47,12 @@ export default function ProductPage() {
                         <>
                             <p className="text-2xl mt-4 font-semibold">Name: {product.name}</p>
                             <p className="text-2xl font-semibold">Type: {product.type}</p>
+                            <img src="/output_image.jpg" className="mt-8 max-w-lg" />
+                            <div className="flex-1 flex flex-col items-center justify-between p-24">
+                                <p className="text-2xl ">{product.description}</p>
+                            </div>
                             {/* Add additional product information here */}
-                            <img src={getImageSrc(product.id)} alt={`Product ${product.id}`} className="mt-8 max-w-lg" />
+                            {/*<img src={getImageSrc(product.id)} alt={`Product ${product.id}`} className="mt-8 max-w-lg" />*/}
                         </>
                     ) : (
                         <p>Loading...</p>
