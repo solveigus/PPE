@@ -389,22 +389,12 @@ export default function Page() {
           .update({ console: consoleType })
           .eq('id', mobilityId )
           .select()
-
-          const { test, testerror } = await supabase
-        .from('hand')
-        .select('id')
-        .eq('id', mobilityId );
-
-        if (data.length > 0) {
-        
-        }else {
           const { data, error } = await supabase //creation main
           .from('hand')
           .insert([
             { hand_valid: false, id_mobility: mobilityId },
           ])
           .select()
-        }
         } catch (error) {
           console.error('Erreur lors de la mise à jour de la base de données:', error.message);
         }
@@ -495,7 +485,7 @@ export default function Page() {
           }
         }
 
-        if (currentQuestionObj.id === 5) { //sensibilité
+        if (currentQuestionObj.id === 5) { //nb doigts
           try {
             let consoleType = "";
             switch(selectedOption) {
@@ -638,10 +628,10 @@ export default function Page() {
 
       if (currentQuestionObj.id === 7) { //pieds J ou C
         try {
-          let consoleType = "";
           switch(selectedOption) {
             case "1": // J
-                if(foot == 2)
+
+              if(foot == 2)
                 {
                     const { data2, error2 } = await supabase
                     .from('foot')
@@ -661,8 +651,10 @@ export default function Page() {
                     ({ foot_joystick: true, id_mobility: mobilityId})
                     .select()
                 }
+                
               break;
             case "2":// C
+
             if(foot == 2)
             {
                 const { data2, error2 } = await supabase
@@ -683,6 +675,7 @@ export default function Page() {
                 ({ foot_contactor: true, id_mobility: mobilityId})
                 .select()
             }
+          
               break;
 
             default:
