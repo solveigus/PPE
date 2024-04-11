@@ -20,8 +20,8 @@ export default function Products() {
         })()
     }, [supabase.auth])
 
-    //const userEmail = 'stina@stina.com'; // Specify the user email here
-    const userEmail = 'tom@tom.fr';
+    const userEmail = 'stina@stina.com'; // Specify the user email here
+    //const userEmail = 'tom@tom.fr';
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -170,16 +170,13 @@ export default function Products() {
                     if (fingerJoystickProducts.length > 0) {
                         fingerJoystickProducts.forEach(element => {
                             finger_sensibility.forEach(sens => {
-                                if(sens=='low' && element.low_sensibility==true)
-                                {
+                                if (sens == 'low' && element.low_sensibility == true) {
                                     fingerProductsData.push(element);
                                 }
-                                if(sens=='medium' && element.medium_sensibility==true)
-                                {
+                                if (sens == 'medium' && element.medium_sensibility == true) {
                                     fingerProductsData.push(element);
                                 }
-                                if(sens=='normal' && element.normal_sensibility==true)
-                                {
+                                if (sens == 'normal' && element.normal_sensibility == true) {
                                     fingerProductsData.push(element);
                                 }
                             });
@@ -189,7 +186,50 @@ export default function Products() {
 
                 const allProductsData = [...productsData, ...fingerProductsData];
 
-                console.log('Products:', allProductsData);
+                const productIds = allProductsData.map(product => product.id);
+
+                // Check if the id_mobility already exists in the products_by_mobility table
+                const { data: existingRow, error: selectError } = await supabase
+                    .from('products_by_mobility')
+                    .select()
+                    .eq('id_mobility', id);
+
+                if (selectError) {
+                    console.error('Error selecting row:', selectError.message);
+                    return;
+                }
+
+                // Create a JSON object with id_mobility and product_ids
+                const rowToInsert = {
+                    id_mobility: id,
+                    product_ids: productIds
+                };
+
+
+                if (existingRow.length > 0) {
+                    const { data: upsertedRow, error: upsertError } = await supabase
+                        .from('products_by_mobility')
+                        .upsert([rowToInsert], { onConflict: ['id_mobility'], merge: true });
+
+                    if (upsertError) {
+                        console.error('Error upserting row:', upsertError.message);
+                        return;
+                    }
+                }
+                else {
+                    // Insert the row into the products_by_mobility table
+                    const { data: insertedRow, error: insertError } = await supabase
+                        .from('products_by_mobility')
+                        .insert([rowToInsert]);
+
+                    if (insertError) {
+                        console.error('Error inserting row:', insertError.message);
+                        return;
+                    }
+                }
+
+
+
 
                 setProducts(allProductsData || []);
             } catch (error) {
