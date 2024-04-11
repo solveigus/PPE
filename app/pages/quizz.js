@@ -618,14 +618,33 @@ export default function Page() {
             case "1"://tir
                 C = 8;
                 J = 1;
+
+                const mobilityData = await supabase
+              .from('mobility')
+              .update({ J: 1, C: 8})
+              .eq('id', mobilityId )
+              .select()
+
               break;
             case "2"://combat
                 C = 4;
                 J = 1;
+
+                const mobilityData1 = await supabase
+              .from('mobility')
+              .update({ J: 1, C: 4})
+              .eq('id', mobilityId )
+              .select()
               break;
             case "3"://sport
                 C = 6;
                 J = 0;
+
+                const mobilityData2 = await supabase
+              .from('mobility')
+              .update({ J: 0, C: 6})
+              .eq('id', mobilityId )
+              .select()
               break;
             default:
               console.error("Option invalide sélectionnée.");
