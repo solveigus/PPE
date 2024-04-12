@@ -87,7 +87,7 @@ export default function Page() {
             const filteredProductData = temp.filter(product => product !== null);
             setProductData(filteredProductData);
 
-              //console.log(productData);
+              console.log(productData);
               
             var stp = [];
             var consJ = 0;
