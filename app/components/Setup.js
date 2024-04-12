@@ -1,17 +1,34 @@
-// Components/Setup.js
+// Setup.js
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 
-export default function Setup({ pictures, mobilityData }) {
+export default function Setup({ pictures, sut, indice }) {
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (pictures && sut && indice) {
+      setLoading(false);
+    }
+  }, [pictures, sut, indice]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
+
   return (
     <div className="border border-black p-4 mb-4 w-full max-w-md flex items-center rounded-lg">
       <div className="pictures pr-4 border-r border-black">
-        <h2 className="text-xl">Pictures:</h2>
+        <h2 className="text-xl font-bold">Pictures:</h2>
         <div className="picture-list grid grid-cols-2 gap-2">
-          {pictures.map((picture, index) => (
-            <Link key={index} href={`/products/${index + 1}`} passHref>
-              <img src={picture} alt={`Picture ${index + 1}`} className="w-full" />
+          {indice.map((id, index) => (
+            <Link key={id} href={`/products/${id}`} passHref>
+              <img src={pictures[index]} alt={`Picture ${index + 1}`} className="w-full" />
             </Link>
           ))}
         </div>
@@ -19,9 +36,9 @@ export default function Setup({ pictures, mobilityData }) {
       <div className="text pl-2">
         <div className="text-list">
           <ul>
-            {mobilityData && Object.keys(mobilityData).map((key, index) => (
-              <li key={index} className="mb-2 text-2xl">
-                <span className="text-2xl font-semibold">{key}</span> : {mobilityData[key]}
+            {sut && sut.map((item, index) => (
+              <li key={index} className="mb-2 text-2xl font-bold">
+                {item}
               </li>
             ))}
           </ul>
